@@ -1,18 +1,24 @@
 import { PassportStatic } from "passport";
+import { Strategy, ExtractJwt } from "passport-jwt";
+import appConfig from "../config/app";
 
-function setUpPassport(passport: PassportStatic) {
-  passport.serializeUser(function (user: any, cb) {
-    process.nextTick(function () {
-      return cb(null, {
-        id: user.user_id,
-        email: user.email,
-      });
-    });
-  });
+export default function setupJWTStrategy(passport: PassportStatic) {
+  passport.use(
+    new Strategy(
+      {
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: appConfig.environment.dev.SECRET_KEY,
+      },
 
-  passport.deserializeUser(function (user: any, cb) {
-    process.nextTick(function () {
-      return cb(null, user);
-    });
-  });
+      function (payload, done) {
+        try {
+          return done(null, {
+            id: payload.id,
+          });
+        } catch (error) {
+          return done(error, null);
+        }
+      }
+    )
+  );
 }

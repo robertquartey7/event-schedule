@@ -1,10 +1,12 @@
 import { Request, Response, Router } from "express";
+import { register } from "../controller/auth";
 
 
 const route = Router()
 
+route.get('/login');
+route.post('/register', register);
 
 
-route.get('/user', async (req: Request, res: Response) => {
-    
-}) 
+
+export default route;

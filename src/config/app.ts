@@ -1,20 +1,21 @@
-import { Options } from "sequelize";
-
-export const appConfig = {
+export default {
   session: {
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
     cookie: { secure: true },
   },
-  database: {
-    dialect: "sqlite",
-    storage: "../db.sqlite",
-  } as Options,
-  
-  database2: <Options>{
-    dialect: "sqlite",
-    storage: "../db.sqlite",
+  environment: {
+    dev: {
+      SECRET_KEY:"MYSECRET",
+      SMTP_SERVER: "",
+      SMTP_PORT: 0,
+      SMTP_EMAIL: "",
+      SMTP_PASSWORD: "",
+      SMTP_USERNAME: "",
+
+      FRONTEND_URL:""
+    },
+    prod: {},
   },
-  
 };

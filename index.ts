@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import { app } from "./src/main";
 
 const PORT = 3000 || process.env.PORT;
