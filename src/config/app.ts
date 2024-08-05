@@ -13,8 +13,7 @@ export default {
       SMTP_EMAIL: "",
       SMTP_PASSWORD: "",
       SMTP_USERNAME: "",
-
-      FRONTEND_URL:""
+      FRONTEND_URL:"http//"
     },
     prod: {},
   },

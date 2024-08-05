@@ -2,11 +2,10 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { RestPassword } from "./Password";
+
+
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
@@ -23,9 +22,12 @@ export class User extends BaseEntity {
 
   @Column({ type: "boolean", default: false, nullable: false })
   is_active!: boolean;
-    
-  @Column({ type: "varchar", length: 600 })
-  @OneToOne(() => RestPassword)
-  @JoinColumn()
-  reset_password?: RestPassword;
+
+  userData({ username, email, password }: any) {
+    this.username = username;
+    this.email = email;
+    this.password = password;
+  }
 }
+
+
