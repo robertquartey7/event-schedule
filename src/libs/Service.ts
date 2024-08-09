@@ -21,8 +21,10 @@ class Service {
 
     make(serviceName: string)
     {
-        
+        if (this.get(serviceName)) return this.get(serviceName);
+
+        return;
     }
 
-    
+    // typeDI
 }

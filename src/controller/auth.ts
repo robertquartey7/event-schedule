@@ -9,8 +9,10 @@ import { loginRequestValidate } from "../libs/requestValidation";
 /* Sign up new users */
 
 export class Auth {
+
   async register(req: Request, res: Response) {
     try {
+      
       const userData: z.infer<typeof loginRequestValidate> = req.body;
       const salt = bcrypt.genSaltSync(10);
       const hashPassword = bcrypt.hashSync(userData.password, salt);
