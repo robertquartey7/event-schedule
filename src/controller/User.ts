@@ -7,4 +7,9 @@ export class User {
   public static all() {
     return UserRepository.find();
   }
+
+  public static findById(id: string) {
+    return UserRepository.findOne({ where: { id: id } });
+  }
+  public static findOne({}: User)
 }

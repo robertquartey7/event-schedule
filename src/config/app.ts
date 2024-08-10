@@ -1,3 +1,7 @@
+import { Helpers } from "../libs/helper";
+
+
+
 export default {
   session: {
     secret: "keyboard cat",
@@ -7,13 +11,14 @@ export default {
   },
   environment: {
     dev: {
-      SECRET_KEY:"MYSECRET",
+      SECRET_KEY: Helpers.env("SECRET_KEY", "MYSECRET"),
       SMTP_SERVER: "",
       SMTP_PORT: 0,
       SMTP_EMAIL: "",
       SMTP_PASSWORD: "",
       SMTP_USERNAME: "",
-      FRONTEND_URL:"http//"
+      FRONTEND_URL: "http//localhost:3000"
+      
     },
     prod: {},
   },
