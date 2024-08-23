@@ -5,12 +5,12 @@ import jwt from "jsonwebtoken";
 import { User } from "../entity/User";
 import { loginRequestValidate } from "../libs/requestValidation";
 import { UserRepository } from "./User";
-import app from "src/config/app";
+import app from "../../src/config/app";
 
 /* Sign up new users */
 
 export class Auth {
-  async register(req: Request, res: Response) {
+  static async register(req: Request, res: Response) {
     try {
       const userData: z.infer<typeof loginRequestValidate> = req.body;
       const foundUser = await UserRepository.findOne({
@@ -45,7 +45,7 @@ export class Auth {
     }
   }
 
-  async login(req: Request, res: Response) {
+  static async login(req: Request, res: Response) {
     try {
       const userData: z.infer<typeof loginRequestValidate> = req.body;
       const user = await User.findOne({
@@ -79,4 +79,3 @@ export class Auth {
     }
   }
 }
-

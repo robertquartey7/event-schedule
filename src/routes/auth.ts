@@ -1,12 +1,16 @@
 import { Router } from "express";
 import { Auth } from "../controller/Auth";
-import { userExist } from "../middleware/auth";
+import { AuthMiddleware } from "../middleware/auth";
+import { Password } from "../controller/Password";
 
 
-const route = Router()
-const auth = new Auth;
+const route = Router();
 
-route.get('/login');
-route.post('/register', userExist, auth.register);
+
+
+route.post('/login', Auth.login);
+route.post('/register', AuthMiddleware.userExist, Auth.register);
+route.get('/reset_password_token', AuthMiddleware.isUserExist, Password.resetPasswordToken)
+// route.post('/reset_password', Password.resetPassword );
 
 export default route;

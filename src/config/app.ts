@@ -17,7 +17,7 @@ export default {
       SMTP_EMAIL: "",
       SMTP_PASSWORD: "",
       SMTP_USERNAME: "",
-      FRONTEND_URL: "http//localhost:3000"
+      FRONTEND_URL: Helpers.env('FRONTEND_URL', "http//localhost:3000")
       
     },
     prod: {},

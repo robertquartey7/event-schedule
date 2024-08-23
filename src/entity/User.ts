@@ -1,9 +1,12 @@
+
 import {
   BaseEntity,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import { Password } from "./Password";
 
 
 @Entity()
@@ -22,6 +25,9 @@ export class User extends BaseEntity {
 
   @Column({ type: "boolean", default: false, nullable: false })
   is_active!: boolean;
+
+  @OneToMany(() => Password, (resetPassword: Password) => resetPassword.user)
+  resetPasswords?: Password[];
 
   userData({ username, email, password }: any) {
     this.username = username;

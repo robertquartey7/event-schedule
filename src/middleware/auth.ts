@@ -1,21 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { UserRepository } from "@controller/User";
+import { User } from "../controller/User";
+import { BaseMiddleware } from "./base";
 
-export async function userExist(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const foundUser = await UserRepository.findOne({
-    where: {
-      email: req.body.email,
-    },
-  });
-  if (foundUser) {
-    return next();
-  }
+export class AuthMiddleware extends BaseMiddleware {
 
-  return res.status(409).json({
-    message: "User already exist",
-  });
+ 
 }

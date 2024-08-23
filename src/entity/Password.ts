@@ -4,13 +4,13 @@ import {
   Entity,
   Generated,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryColumn,
 } from "typeorm";
 import { User } from "./User";
 
 @Entity()
-export class RestPassword extends BaseEntity {
+export class Password extends BaseEntity {
   @PrimaryColumn()
   @Generated("uuid")
   id!: string;
@@ -24,8 +24,8 @@ export class RestPassword extends BaseEntity {
   @Column({ type: "datetime", nullable: true })
   expiration_date?: Date;
 
-  @JoinColumn()
-  @OneToOne(() => User)
+  @JoinColumn({ name: 'user_id'})
+  @ManyToOne(() => User, (user: User) => user.resetPasswords)
   user?: User;
 }
 

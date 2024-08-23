@@ -9,12 +9,11 @@ export const app = express();
 
 app.use(express.json());
 app.use(cors());
-// app.use(session(appConfig.session));
 
 setupJWTStrategy(passport);
 AppDataSource.initialize();
 
-app.use("/api/", authRoute);
+app.use("/api", authRoute);
 
 app.get("/api", (req: Request, res: Response) => {
   return res.status(200).json({
