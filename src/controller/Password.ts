@@ -1,4 +1,4 @@
-import { User } from "./User";
+import { UserController } from "./User";
 import { Password as PasswordEntity } from "../entity/Password";
 import { AppDataSource } from "../data-source";
 import { Request, Response } from "express";
@@ -6,7 +6,6 @@ import { Request, Response } from "express";
 export const PasswordRepository = AppDataSource.getRepository(PasswordEntity);
 
 export class Password {
-
   
   public static async resetPassword(req: Request, res: Response) {
     try {

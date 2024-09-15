@@ -3,7 +3,7 @@ import { User as UserEntity } from "../entity/User";
 
 export const UserRepository = AppDataSource.getRepository(UserEntity);
 
-export class User {
+export class UserController {
   public static async all() {
     return await UserRepository.find();
   }

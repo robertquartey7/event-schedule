@@ -1,15 +1,27 @@
 import crypto from 'crypto'
+import jwt from "jsonwebtoken";
+import appConfig from "../config/app";
+import { Params } from "src/interface";
 
+const secretKey = appConfig.environment.dev.SECRET_KEY;
 export class TokenService {
-    
-    
-    static async resetPasswordToken(userId: string) {
-        try {
-            const token = crypto.randomBytes(64).toString('hex');
-            // const saveToken = await Password
+  static generateToken(): string {
+    return crypto.randomBytes(64).toString("hex");
+  }
 
-         } catch (err) {
-            
-        }
+  static generateAccessToken(accessInfo: Params): string {
+    return jwt.sign(accessInfo, secretKey);
+  }
+  static generateIdToken(id: string): string {
+    return jwt.sign({ id }, secretKey);
+  }
+  static generateRefreshToken(): void {}
+
+  static verifyToken(token: string) {
+    try {
+      return jwt.verify(token, secretKey);
+    } catch (error) {
+      throw new Error("Token is invalid");
     }
+  }
 }
