@@ -1,18 +1,15 @@
 import bcrypt from "bcrypt";
-import { Request, Response } from "express";
-import { z } from "zod";
+import {  z } from "zod";
 import { User } from "../entity/User";
-import { loginRequestValidate } from "../libs/requestValidation";
+import { loginRequestValidate } from "../request/requestValidation";
 import { UserController } from "../controller/User";
 import { TokenService } from "../service/tokenService";
-import jwt from "jsonwebtoken";
+import { PasswordController } from "../controller/Password";
+
 export class AuthService {
-  static async registeruser(userInfo: any) {
+  static async register(userInfo: any) {
     try {
       const userData: z.infer<typeof loginRequestValidate> = userInfo;
-      const foundUser = await UserController.findOneByEmail(userData.email);
-
-      if (foundUser) return null;
 
       const salt = bcrypt.genSaltSync(10);
       const hashPassword = bcrypt.hashSync(userData.password, salt);
@@ -30,7 +27,7 @@ export class AuthService {
         return user;
       }
     } catch (error: any) {
-      return null;
+      throw new Error(error.message);
     }
   }
 
@@ -60,17 +57,47 @@ export class AuthService {
     }
   }
 
-  static async forgotPassword(req: Request, res: Response) {
+  static async requestForgotPassword(email: string) {
     try {
-      const { email } = req.params;
       const user = await UserController.findOneByEmail(email);
-      if (!user) return res.status(404).json("Email does not exist");
-
-      const token = TokenService.generateIdToken(user.id);
-
-      return res.status(200).json({ token });
+      if (!user) throw new Error("Email does not exist");
+      const generateTokentoken = TokenService.generateIdToken(user.id);
+      const resetPassword = await PasswordController.createOne({
+        token: generateTokentoken,
+        user: user,
+      });
+      if (!resetPassword) throw new Error("Something went wrong");
+      await resetPassword.save();
+      return resetPassword.token;
     } catch (err: any) {
-      return res.status(500).json({ message: err.messsage });
+      throw new Error(err.message);
+    }
+  }
+  static async resetPassword(
+    token: string,
+    password: string,
+    newPassword: string
+  ) {
+    try {
+      const resetPassword = await PasswordController.findOneByToken(token);
+
+      if (
+        !resetPassword ||
+        (resetPassword.expiration_date &&
+          resetPassword.expiration_date < new Date())
+      ) {
+        throw new Error("Invalid or expired token");
+      }
+
+      if (resetPassword.user?.password === password)
+        throw new Error("Password does not match");
+
+      if (resetPassword.user) {
+        resetPassword.user.password = newPassword;
+      }
+      return await resetPassword.save();
+    } catch (error: unknown) {
+      if (error instanceof Error) throw new Error(error.message);
     }
   }
 }

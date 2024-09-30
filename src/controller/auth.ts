@@ -1,40 +1,61 @@
-import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import { z } from "zod";
-import { User } from "../entity/User";
-import { loginRequestValidate } from "../libs/requestValidation";
-import {  UserController } from "./User";
 import { TokenService } from "../service/tokenService";
-import { AuthService } from "src/service/authService";
+import { AuthService } from "../service/authService";
+import { PasswordController } from "./Password";
 
 /* Sign up new users */
 
 export class Auth {
   static async register(req: Request, res: Response) {
     try {
-      const user = AuthService.login(req.body);
-      
-      
+      const user = await AuthService.register(req.body);
+      if (!user)
+        return res.status(500).json({ message: "something went wrong" });
+
+      return res
+        .status(200)
+        .cookie("id_token", TokenService.generateIdToken(user.id))
+        .cookie("access_token", TokenService.generateAccessToken(user))
+        .cookie("refresh_token", TokenService.generateRefreshToken())
+        .json({ success: true });
     } catch (error: any) {
-     
+      return res.status(500).json({ message: error.message });
     }
   }
 
   static async login(req: Request, res: Response) {
     try {
-      res.cookie("id_token", TokenService.generateIdToken(user.id));
-      res.cookie("access_token", TokenService.generateAccessToken(user));
-      res.cookie("refresh_token", TokenService.generateRefreshToken());
+      const user = await AuthService.login(req.body);
+      if (!user) return res.status(404).json({ message: "User not found" });
+      console.log(user);
+      return res
+        .status(200)
+        .cookie("id_token", TokenService.generateIdToken(user.id))
+        .cookie("access_token", TokenService.generateAccessToken(user))
+        .cookie("refresh_token", TokenService.generateRefreshToken())
+        .json({ success: true });
     } catch (error: any) {
-      
+      return res.status(500).json({ message: error.message });
     }
   }
 
   static async forgotPassword(req: Request, res: Response) {
     try {
-      
+      const token = await AuthService.requestForgotPassword(req.params.email);
+      if (!token) return res.status(404).json("Email does not exist");
+      return res.status(200).json({ token });
     } catch (err: any) {
-    
+      return res.status(500).json({ message: err.message });
     }
+  }
+
+  static async logout(_req: Request, res: Response) {
+    // return res.clearCookie('');
+  }
+  
+  static async resetPassword(req: Request, res: Response) {
+    const { passwordA, passwordB, token } = req.body;
+
+    // const resetPassword = 
   }
 }

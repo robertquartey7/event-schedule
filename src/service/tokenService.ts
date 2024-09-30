@@ -9,11 +9,11 @@ export class TokenService {
     return crypto.randomBytes(64).toString("hex");
   }
 
-  static generateAccessToken(accessInfo: Params): string {
-    return jwt.sign(accessInfo, secretKey);
+  static generateAccessToken(accessInfo: any): string {
+    return jwt.sign({ ...accessInfo }, secretKey);
   }
-  static generateIdToken(id: string): string {
-    return jwt.sign({ id }, secretKey);
+  static generateIdToken(id: string) {
+    return jwt.sign({ id: id }, secretKey);
   }
   static generateRefreshToken(): void {}
 

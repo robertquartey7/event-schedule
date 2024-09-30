@@ -8,6 +8,7 @@ export class BaseMiddleware {
       if (!foundUser) {
         return res.status(404).json({ message: "User not found" });
       }
+      req.user = foundUser;
       next();
     } catch (error) {
       return;

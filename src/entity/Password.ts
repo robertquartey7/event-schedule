@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import { User } from "./User";
 
-@Entity()
+@Entity('reset_password')
 export class Password extends BaseEntity {
   @PrimaryColumn()
   @Generated("uuid")
