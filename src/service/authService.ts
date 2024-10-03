@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt";
-import {  z } from "zod";
+import { z } from "zod";
 import { User } from "../entity/User";
 import { loginRequestValidate } from "../request/requestValidation";
 import { UserController } from "../controller/User";
-import { TokenService } from "../service/tokenService";
+import { TokenService } from "./tokenService";
 import { PasswordController } from "../controller/Password";
 
 export class AuthService {
@@ -26,8 +26,8 @@ export class AuthService {
         delete user.password;
         return user;
       }
-    } catch (error: any) {
-      throw new Error(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) throw new Error(error.message);
     }
   }
 
@@ -39,6 +39,7 @@ export class AuthService {
           email: userData.email,
         },
       });
+      
 
       if (!user) {
         throw new Error("User not found");
@@ -51,8 +52,10 @@ export class AuthService {
       if (!comparedPassword) {
         throw new Error("password does not match");
       }
+      delete user.password;
       return user;
     } catch (error: any) {
+      
       throw new Error(error.message);
     }
   }
@@ -89,11 +92,12 @@ export class AuthService {
         throw new Error("Invalid or expired token");
       }
 
-      if (resetPassword.user?.password === password)
-        throw new Error("Password does not match");
+      if (await bcrypt.compare(password, resetPassword.user?.password!)) {
+        throw new Error("Current password matches the new password");
+      }
 
       if (resetPassword.user) {
-        resetPassword.user.password = newPassword;
+        resetPassword.user.password = bcrypt.hashSync(newPassword, 10);
       }
       return await resetPassword.save();
     } catch (error: unknown) {

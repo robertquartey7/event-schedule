@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import nodemailer from "nodemailer";
 import SMTPTransport from "nodemailer/lib/smtp-transport";
-import appConfig from "../config/app";
+import appConfig from "./app";
 import { MailOptionInterface } from "../interface";
 
 const transporterConfig: SMTPTransport.Options = {

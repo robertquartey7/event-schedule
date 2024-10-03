@@ -27,7 +27,6 @@ export class Auth {
     try {
       const user = await AuthService.login(req.body);
       if (!user) return res.status(404).json({ message: "User not found" });
-      console.log(user);
       return res
         .status(200)
         .cookie("id_token", TokenService.generateIdToken(user.id))
@@ -52,10 +51,15 @@ export class Auth {
   static async logout(_req: Request, res: Response) {
     // return res.clearCookie('');
   }
-  
-  static async resetPassword(req: Request, res: Response) {
-    const { passwordA, passwordB, token } = req.body;
 
-    // const resetPassword = 
+  static async resetPassword(req: Request, res: Response) {
+    try {
+      const { passwordA, passwordB, token } = req.body;
+      await AuthService.resetPassword(token, passwordA, passwordB);
+      return res.status(200).json({ message: "success" });
+    } catch (err: any) {
+      return res.status(500).json({ message: err.message });
+    }
+
   }
 }

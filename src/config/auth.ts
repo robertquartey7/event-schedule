@@ -1,6 +1,6 @@
 import { PassportStatic } from "passport";
 import { Strategy, ExtractJwt } from "passport-jwt";
-import appConfig from "../config/app";
+import appConfig from "./app";
 
 export default function setupJWTStrategy(passport: PassportStatic) {
   passport.use(

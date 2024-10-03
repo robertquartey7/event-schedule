@@ -1,7 +1,6 @@
 import crypto from 'crypto'
 import jwt from "jsonwebtoken";
 import appConfig from "../config/app";
-import { Params } from "src/interface";
 
 const secretKey = appConfig.environment.dev.SECRET_KEY;
 export class TokenService {

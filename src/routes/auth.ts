@@ -1,12 +1,8 @@
 import { Router } from "express";
 import { Auth } from "../controller/Auth";
 import { AuthMiddleware } from "../middleware/auth";
-import { PasswordController } from "../controller/Password";
-
 
 const route = Router();
-
-
 
 route.post('/login', Auth.login);
 route.post('/register', AuthMiddleware.userExist, Auth.register);

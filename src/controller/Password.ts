@@ -1,7 +1,7 @@
 import { Password as PasswordEntity } from "../entity/Password";
 import { AppDataSource } from "../data-source";
 import { ResetPasswordInferface } from "src/interface/password";
-import { Request, Response } from "express-serve-static-core";
+
 
 export const PasswordRepository = AppDataSource.getRepository(PasswordEntity);
 
@@ -10,7 +10,7 @@ export class PasswordController {
     return PasswordRepository.create({
       token: tokenInfo.token,
       is_expired: false,
-      expiration_date: Date.now(),
+      expiration_date: new Date(new Date().getTime() + 60 * 60 * 1000),
       user: tokenInfo.user,
     });
   }
@@ -25,13 +25,16 @@ export class PasswordController {
   static async findOneByToken(token: string) {
     return PasswordRepository.findOne({
       where: {
-        token
-      }
-    })
+        token,
+      },
+    });
   }
-  
+
   static async all() {
     return PasswordRepository.find();
   }
- 
+
+  static async deleteAll() {
+    return PasswordRepository.clear();
+  }
 }
