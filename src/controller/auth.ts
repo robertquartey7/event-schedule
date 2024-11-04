@@ -17,7 +17,7 @@ export class Auth {
         .cookie("id_token", TokenService.generateIdToken(user.id))
         .cookie("access_token", TokenService.generateAccessToken(user))
         .cookie("refresh_token", TokenService.generateRefreshToken())
-        .json({ success: true });
+        .json({ success: true, data: user });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
     }
@@ -32,7 +32,7 @@ export class Auth {
         .cookie("id_token", TokenService.generateIdToken(user.id))
         .cookie("access_token", TokenService.generateAccessToken(user))
         .cookie("refresh_token", TokenService.generateRefreshToken())
-        .json({ success: true });
+        .json({ success: true, data: user });
     } catch (error: any) {
       return res.status(500).json({ message: error.message });
     }
@@ -60,6 +60,5 @@ export class Auth {
     } catch (err: any) {
       return res.status(500).json({ message: err.message });
     }
-
   }
 }

@@ -12,7 +12,7 @@ export class User1718660217152 implements MigrationInterface {
         columns: [
           {
             name: "id",
-            type: "varchar",
+            type: "uuid",
             isPrimary: true,
             isNullable: false,
           },
@@ -34,9 +34,27 @@ export class User1718660217152 implements MigrationInterface {
           {
             name: "is_active",
             type: "boolen",
-            default: false
+            default: false,
+          },
+          {
+            name: "is_email_verified",
+            type: "boolen",
+            isNullable: false,
+            default: false,
+          },
+          {
+            name: "created_at",
+            type: "timestamp",
+            default: "CURRENT_TIMESTAMP",
+          },
+          {
+            name: "updated_at",
+            type: "timestamp",
+            default: "CURRENT_TIMESTAMP",
+            onUpdate: "CURRENT_TIMESTAMP",
           },
         ],
+        foreignKeys: [],
       })
     );
   }

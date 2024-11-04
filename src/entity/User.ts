@@ -1,43 +1,44 @@
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { Business } from "./Business";
+import { Customer } from "./Customer";
+import { BusinessOwner } from "./BusinessOwner";
+import { ResetPassword } from "./Password";
 
-import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
-import { Password } from "./Password";
-import { Business } from './Business'; 
-
-@Entity()
-export class User extends BaseEntity {
+@Entity("user")
+export class User {
   @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  id: string;
 
-  @Column({ type: "varchar", length: 600 })
-  username?: string;
+  @Column({ length: 600 })
+  username: string;
 
-  @Column({ type: "varchar", length: 600 })
-  email?: string;
+  @Column({ length: 600 })
+  email: string;
 
-  @Column({ type: "varchar", length: 600 })
-  password?: string;
+  @Column({ length: 600 })
+  password: string;
 
-  @Column({ type: "boolean", default: false, nullable: false })
-  is_active!: boolean;
+  @Column({ default: false })
+  is_active: boolean;
 
-  @OneToMany(() => Password, resetPassword => resetPassword.user)
-  resetPasswords?: Password[];
+  @Column({ default: false })
+  is_email_verified: boolean;
+
+  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+  updated_at: Date;
 
   @OneToMany(() => Business, business => business.user)
-  businesses?: Business[];
-  
-  userData({ username, email, password }: any) {
-    this.username = username;
-    this.email = email;
-    this.password = password;
-  }
-}
+  businesses: Business[];
 
+  @OneToMany(() => Customer, customer => customer.user)
+  customers: Customer[];
+
+  @OneToMany(() => BusinessOwner, businessOwner => businessOwner.user)
+  businessOwners: BusinessOwner[];
+
+  @OneToMany(() => ResetPassword, resetPassword => resetPassword.user)
+  resetPasswords: ResetPassword[];
+}

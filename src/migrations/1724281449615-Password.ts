@@ -33,6 +33,17 @@ export class Password1724281449615 implements MigrationInterface {
                         name: 'expiration_date',
                         type: 'timestamp',
                     },
+                    {
+                        name: "created_at",
+                        type: "timestamp",
+                        default: "CURRENT_TIMESTAMP",
+                      },
+                      {
+                        name: "updated_at",
+                        type: "timestamp",
+                        default: "CURRENT_TIMESTAMP",
+                        onUpdate: "CURRENT_TIMESTAMP",
+                      },
 
                 ],
                 foreignKeys: [

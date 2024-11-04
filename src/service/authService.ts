@@ -19,6 +19,7 @@ export class AuthService {
       user.userData({
         ...userData,
         password: hashPassword,
+        is_active: true,
       });
       await user.save();
 

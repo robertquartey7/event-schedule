@@ -1,14 +1,14 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class Business1727925974145 implements MigrationInterface {
+export class Customer1730617095524 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "business",
+        name: "customer",
         columns: [
           {
             name: "id",
-            type: "uuid", // Changed to UUID for unique identification
+            type: "uuid", // Consider using UUID for better uniqueness
             isPrimary: true,
             isNullable: false,
           },
@@ -16,53 +16,23 @@ export class Business1727925974145 implements MigrationInterface {
             name: "name",
             type: "varchar",
             length: "600",
-            isNullable: false,
-          },
-          {
-            name: "address",
-            type: "varchar",
-            length: "600",
-            isNullable: true,
-          },
-          {
-            name: "phone_number",
-            type: "varchar",
-            length: "15",
-            isNullable: true,
+            isNullable: false, // Consider making this required
           },
           {
             name: "email",
             type: "varchar",
-            length: "255",
-            isNullable: true,
+            length: "600",
+            isNullable: false, // Consider making this required
           },
           {
-            name: "website",
+            name: "phone_number",
             type: "varchar",
-            length: "255",
+            length: "20", // Adjust length based on expected formats
             isNullable: true,
-          },
-          {
-            name: "opening_hours",
-            type: "json",
-            isNullable: true,
-          },
-          {
-            name: "services_offered",
-            type: "json",
-            isNullable: true,
-          },
-          {
-            name: "rating",
-            type: "decimal",
-            precision: 2,
-            scale: 1,
-            isNullable: true,
-            default: 0,
           },
           {
             name: "user_id",
-            type: "uuid", // Changed to UUID to match the user table
+            type: "uuid", // Assuming user_id is also a UUID
             isNullable: false,
           },
           {
@@ -90,7 +60,9 @@ export class Business1727925974145 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey("business", "FK_business_user_id"); // Specify foreign key name if needed
-    await queryRunner.dropTable("business");
+
+    // await queryRunner.dropForeignKey("customer", "FK_customer_user_id"); // Replace with the actual foreign key name if necessary
+
+    // await queryRunner.dropTable("customer");
   }
 }

@@ -1,31 +1,29 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  Generated,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
 import { User } from "./User";
 
-@Entity('reset_password')
-export class Password extends BaseEntity {
-  @PrimaryColumn()
-  @Generated("uuid")
-  id!: string;
+@Entity("reset_password")
+export class ResetPassword {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-  @Column({ nullable: true, type: "varchar" })
-  token!: string;
+  @Column({ type: "uuid" })
+  user_id: string;
 
-  @Column({ type: "boolean", default: false })
-  is_expired?: boolean;
+  @Column({ length: 600, nullable: true })
+  token: string;
 
-  @Column({ type: "datetime", nullable: true })
-  expiration_date?: Date;
+  @Column({ default: false })
+  is_expired: boolean;
 
-  @JoinColumn({ name: 'user_id'})
-  @ManyToOne(() => User, (user: User) => user.resetPasswords)
-  user?: User;
+  @Column({ type: "timestamp" })
+  expiration_date: Date;
+
+  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  created_at: Date;
+
+  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+  updated_at: Date;
+
+  @ManyToOne(() => User, user => user.resetPasswords)
+  user: User;
 }
-
